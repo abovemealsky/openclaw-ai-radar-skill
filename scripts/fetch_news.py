@@ -15,8 +15,10 @@ SKILL_ROOT = os.path.dirname(SCRIPT_DIR)
 SOURCES_FILE = os.path.join(SKILL_ROOT, "sources/news_sources.json")
 OUTPUT_FILE = os.path.join(SKILL_ROOT, "data/raw/news.json")
 
-# Only keep news from the last 7 days
-MAX_AGE_DAYS = 7
+# Only keep news from the last 24 hours (daily) or 7 days (weekly)
+# Set mode: "daily" or "weekly"
+MODE = os.environ.get("RADAR_MODE", "daily")
+MAX_AGE_DAYS = 1 if MODE == "daily" else 7
 
 
 def load_sources():

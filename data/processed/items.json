@@ -1,0 +1,92 @@
+[
+  {
+    "category": "open_source",
+    "title": "ruvnet/RuView",
+    "source": "github",
+    "url": "https://github.com/ruvnet/RuView",
+    "summary": "π RuView: WiFi DensePose turns commodity WiFi signals into real-time human pose estimation, vital sign monitoring, and presence detection — all without a single pixel of video.",
+    "language": "Rust",
+    "published": ""
+  },
+  {
+    "category": "open_source",
+    "title": "moeru-ai/airi",
+    "source": "github",
+    "url": "https://github.com/moeru-ai/airi",
+    "summary": "💖🧸 Self hosted, you-owned Grok Companion, a container of souls of waifu, cyber livings to bring them into our worlds, wishing to achieve Neuro-sama's altitude. Capable of realtime voice chat, Minecraft, Factorio playing. Web / macOS / Windows supported.",
+    "language": "TypeScript",
+    "published": ""
+  },
+  {
+    "category": "open_source",
+    "title": "alibaba/OpenSandbox",
+    "source": "github",
+    "url": "https://github.com/alibaba/OpenSandbox",
+    "summary": "OpenSandbox is a general-purpose sandbox platform for AI applications, offering multi-language SDKs, unified sandbox APIs, and Docker/Kubernetes runtimes for scenarios like Coding Agents, GUI Agents, Agent Evaluation, AI Code Execution, and RL Training.",
+    "language": "Python",
+    "published": ""
+  },
+  {
+    "category": "open_source",
+    "title": "bytedance/deer-flow",
+    "source": "github",
+    "url": "https://github.com/bytedance/deer-flow",
+    "summary": "An open-source SuperAgent harness that researches, codes, and creates. With the help of sandboxes, memories, tools, skills and subagents, it handles different levels of tasks that could take minutes to hours.",
+    "language": "Python",
+    "published": ""
+  },
+  {
+    "category": "open_source",
+    "title": "abhigyanpatwari/GitNexus",
+    "source": "github",
+    "url": "https://github.com/abhigyanpatwari/GitNexus",
+    "summary": "GitNexus: The Zero-Server Code Intelligence Engine - GitNexus is a client-side knowledge graph creator that runs entirely in your browser. Drop in a GitHub repo or ZIP file, and get an interactive knowledge graph wit a built in Graph RAG Agent. Perfect for code exploration",
+    "language": "TypeScript",
+    "published": ""
+  },
+  {
+    "category": "open_source",
+    "title": "shareAI-lab/learn-claude-code",
+    "source": "github",
+    "url": "https://github.com/shareAI-lab/learn-claude-code",
+    "summary": "Bash is all you need - A nano Claude Code–like agent, built from 0 to 1",
+    "language": "TypeScript",
+    "published": ""
+  },
+  {
+    "category": "open_source",
+    "title": "superset-sh/superset",
+    "source": "github",
+    "url": "https://github.com/superset-sh/superset",
+    "summary": "IDE for the AI Agents Era - Run an army of Claude Code, Codex, etc. on your machine",
+    "language": "TypeScript",
+    "published": ""
+  },
+  {
+    "category": "open_source",
+    "title": "D4Vinci/Scrapling",
+    "source": "github",
+    "url": "https://github.com/D4Vinci/Scrapling",
+    "summary": "🕷️ An adaptive Web Scraping framework that handles everything from a single request to a full-scale crawl!",
+    "language": "Python",
+    "published": ""
+  },
+  {
+    "category": "open_source",
+    "title": "CodebuffAI/codebuff",
+    "source": "github",
+    "url": "https://github.com/CodebuffAI/codebuff",
+    "summary": "Generate code from the terminal!",
+    "language": "TypeScript",
+    "published": ""
+  },
+  {
+    "category": "open_source",
+    "title": "anthropics/prompt-eng-interactive-tutorial",
+    "source": "github",
+    "url": "https://github.com/anthropics/prompt-eng-interactive-tutorial",
+    "summary": "Anthropic's Interactive Prompt Engineering Tutorial",
+    "language": "Jupyter Notebook",
+    "published": ""
+  }
+]
