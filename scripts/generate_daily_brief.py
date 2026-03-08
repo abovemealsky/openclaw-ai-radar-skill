@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate daily brief from normalized items.
+Generate daily brief from normalized intelligence items.
 """
 import json
 import os
@@ -29,46 +29,25 @@ def load_items():
 
 def categorize_items(items):
     """Categorize items by type."""
-    news = []
-    research = []
-    open_source = []
+    categories = {
+        "model_releases": [],
+        "research": [],
+        "open_source": [],
+        "industry": [],
+        "policy": []
+    }
     
     for item in items:
-        category = item.get("category", "")
-        if category == "news":
-            news.append(item)
-        elif category == "research":
-            research.append(item)
-        elif category == "open_source":
-            open_source.append(item)
+        category = item.get("category", "industry")
+        if category in categories:
+            categories[category].append(item)
+        else:
+            categories["industry"].append(item)
     
-    return news, research, open_source
+    return categories
 
 
-def format_item(item, include_source=True):
-    """Format a single item as markdown."""
-    title = item.get("title", "")
-    url = item.get("url", "")
-    summary = item.get("summary", "")
-    source = item.get("source", "")
-    
-    lines = []
-    if summary and summary != title:
-        lines.append(f"- **{title}**")
-        lines.append(f"  {summary}")
-    else:
-        lines.append(f"- **{title}**")
-    
-    if include_source and source:
-        lines.append(f"  Source: {source}")
-    
-    if url:
-        lines.append(f"  [Link]({url})")
-    
-    return "\n".join(lines)
-
-
-def generate_brief(news, research, open_source):
+def generate_brief(categories):
     """Generate the daily brief markdown."""
     today = datetime.now().strftime("%Y-%m-%d")
     
@@ -81,76 +60,42 @@ def generate_brief(news, research, open_source):
         f"",
     ]
     
-    # Key Updates (News)
-    lines.append("## Key Updates")
-    lines.append("")
-    if news:
-        for item in news[:5]:
-            title = item.get("title", "")
-            url = item.get("url", "")
-            source = item.get("source", "")
-            
-            lines.append(f"- **{title}**")
-            lines.append(f"  - Source: {source}")
-            if url:
-                lines.append(f"  - [Read more]({url})")
-            lines.append("")
-    else:
-        lines.append("*No news updates available today.*")
-        lines.append("")
+    # Category titles
+    category_titles = {
+        "model_releases": "Model Releases",
+        "research": "Research Highlights",
+        "open_source": "Open Source",
+        "industry": "Industry Developments",
+        "policy": "Policy & Governance"
+    }
     
-    # Research Highlights
-    lines.append("## Research Highlights")
-    lines.append("")
-    if research:
-        for item in research[:5]:
-            title = item.get("title", "")
-            url = item.get("url", "")
-            source = item.get("source", "")
-            
-            lines.append(f"- **{title}**")
-            lines.append(f"  - Source: {source}")
-            if url:
-                lines.append(f"  - [Paper]({url})")
-            lines.append("")
-    else:
-        lines.append("*No research papers available today.*")
+    # Generate each section
+    for cat_key, cat_title in category_titles.items():
+        lines.append(f"## {cat_title}")
         lines.append("")
-    
-    # Open Source
-    lines.append("## Open Source")
-    lines.append("")
-    if open_source:
-        for item in open_source[:5]:
-            repo_name = item.get("title", "")
-            url = item.get("url", "")
-            language = item.get("language", "")
-            
-            lines.append(f"- **{repo_name}**")
-            if language:
-                lines.append(f"  - Language: {language}")
-            if url:
-                lines.append(f"  - [View]({url})")
+        
+        items = categories.get(cat_key, [])
+        if items:
+            # Limit to 5 items per category
+            for item in items[:5]:
+                title = item.get("title", "")
+                url = item.get("url", "")
+                source = item.get("source", "")
+                
+                lines.append(f"- **{title}**")
+                if source:
+                    lines.append(f"  - Source: {source}")
+                if url:
+                    lines.append(f"  - [Link]({url})")
+                lines.append("")
+        else:
+            lines.append(f"*No items in this category.*")
             lines.append("")
-    else:
-        lines.append("*No trending repositories available today.*")
-        lines.append("")
-    
-    # Industry Signals
-    lines.append("## Industry Signals")
-    lines.append("")
-    lines.append("AI product launches, research papers, and open-source projects continue to show strong momentum.")
-    lines.append("")
-    lines.append("Key trends:")
-    lines.append("- Agent and workflow automation remain hot topics")
-    lines.append("- Multimodal models are gaining adoption")
-    lines.append("- Open-source AI tools are becoming more production-ready")
-    lines.append("")
     
     # Quick Take
     lines.append("## Quick Take")
     lines.append("")
-    lines.append("The AI ecosystem continues to evolve rapidly. Focus on Agent frameworks and multimodal capabilities as key areas to watch.")
+    lines.append("The AI ecosystem continues to evolve rapidly. Focus on model releases, agent frameworks, and regulatory developments as key areas to watch.")
     lines.append("")
     
     return "\n".join(lines)
@@ -161,18 +106,19 @@ def main():
     print("Generating daily brief...")
     
     items = load_items()
-    news, research, open_source = categorize_items(items)
+    categories = categorize_items(items)
     
-    brief = generate_brief(news, research, open_source)
+    brief = generate_brief(categories)
     
-    os.makedirs("data/processed", exist_ok=True)
+    os.makedirs(os.path.join(SKILL_ROOT, "data/processed"), exist_ok=True)
     with open(OUTPUT_FILE, "w") as f:
         f.write(brief)
     
+    # Print summary
     print(f"Daily brief generated -> {OUTPUT_FILE}")
-    print(f"  - News items: {len(news)}")
-    print(f"  - Research papers: {len(research)}")
-    print(f"  - Open source repos: {len(open_source)}")
+    print("Items per category:")
+    for cat, items_list in categories.items():
+        print(f"  - {cat}: {len(items_list)}")
 
 
 if __name__ == "__main__":

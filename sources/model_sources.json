@@ -1,0 +1,11 @@
+{
+  "sources": [
+    "https://openai.com/blog/rss",
+    "https://www.anthropic.com/news/rss",
+    "https://ai.googleblog.com/feeds/posts/default",
+    "https://deepmind.google/discover/blog/rss.xml",
+    "https://mistral.ai/news/rss.xml",
+    "https://stability.ai/blog/rss.xml",
+    "https://blog.perplexity.ai/rss.xml"
+  ]
+}

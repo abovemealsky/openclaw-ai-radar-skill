@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Normalize items from different sources into a unified format.
+Normalize intelligence items into a unified format.
 """
 import json
 import os
@@ -9,96 +9,71 @@ import os
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 SKILL_ROOT = os.path.dirname(SCRIPT_DIR)
 
-NEWS_FILE = os.path.join(SKILL_ROOT, "data/raw/news.json")
-RESEARCH_FILE = os.path.join(SKILL_ROOT, "data/raw/research.json")
-OPEN_SOURCE_FILE = os.path.join(SKILL_ROOT, "data/raw/open_source.json")
+INPUT_FILE = os.path.join(SKILL_ROOT, "data/raw/intelligence.json")
 OUTPUT_FILE = os.path.join(SKILL_ROOT, "data/processed/items.json")
 
 
-def load_json(filepath):
-    """Load JSON file."""
+def load_items():
+    """Load raw intelligence items."""
     try:
-        with open(filepath, "r") as f:
+        with open(INPUT_FILE, "r") as f:
             return json.load(f)
     except FileNotFoundError:
-        print(f"Warning: {filepath} not found")
+        print(f"Warning: {INPUT_FILE} not found")
         return []
     except json.JSONDecodeError as e:
-        print(f"Error parsing {filepath}: {e}")
+        print(f"Error parsing {INPUT_FILE}: {e}")
         return []
 
 
-def normalize_news(news_items):
-    """Normalize news items."""
-    normalized = []
-    for item in news_items:
-        normalized.append({
-            "category": "news",
-            "title": item.get("title", ""),
-            "source": item.get("source", "news"),
-            "url": item.get("link", ""),
-            "summary": item.get("title", ""),
-            "published": item.get("published", "")
-        })
-    return normalized
-
-
-def normalize_research(research_items):
-    """Normalize research items."""
-    normalized = []
-    for item in research_items:
-        normalized.append({
-            "category": "research",
-            "title": item.get("title", ""),
-            "source": item.get("source", "arxiv"),
-            "url": item.get("link", ""),
-            "summary": item.get("title", ""),
-            "published": item.get("published", "")
-        })
-    return normalized
-
-
-def normalize_open_source(open_source_items):
-    """Normalize open source items."""
-    normalized = []
-    for item in open_source_items:
-        normalized.append({
+def normalize_item(item):
+    """Normalize a single item to standard format."""
+    # Handle GitHub items which have different structure
+    if item.get("category") == "open_source":
+        return {
             "category": "open_source",
-            "title": item.get("repo_name", ""),
-            "source": "github",
-            "url": item.get("url", ""),
-            "summary": item.get("description", ""),
+            "title": item.get("title", ""),
+            "source": item.get("source", "GitHub"),
+            "url": item.get("link", ""),
+            "summary": item.get("description", item.get("title", "")),
             "language": item.get("language", ""),
-            "published": ""
-        })
-    return normalized
+            "published": item.get("published", "")
+        }
+    
+    # Handle RSS feed items
+    return {
+        "category": item.get("category", "industry"),
+        "title": item.get("title", ""),
+        "source": item.get("source", ""),
+        "url": item.get("link", ""),
+        "summary": item.get("title", ""),  # Use title as summary for now
+        "published": item.get("published", "")
+    }
 
 
 def main():
-    """Main function to normalize all items."""
-    os.makedirs("data/processed", exist_ok=True)
+    """Main function to normalize items."""
+    os.makedirs(os.path.join(SKILL_ROOT, "data/processed"), exist_ok=True)
     
-    print("Normalizing items...")
+    print("Normalizing intelligence items...")
     
-    # Load raw data
-    news = load_json(NEWS_FILE)
-    research = load_json(RESEARCH_FILE)
-    open_source = load_json(OPEN_SOURCE_FILE)
+    items = load_items()
+    normalized = [normalize_item(item) for item in items]
     
-    # Normalize
-    normalized = []
-    normalized.extend(normalize_news(news))
-    normalized.extend(normalize_research(research))
-    normalized.extend(normalize_open_source(open_source))
+    # Count by category
+    categories = {}
+    for item in normalized:
+        cat = item.get("category", "unknown")
+        categories[cat] = categories.get(cat, 0) + 1
     
     # Save
     with open(OUTPUT_FILE, "w") as f:
         json.dump(normalized, f, indent=2, ensure_ascii=False)
     
     print(f"Normalized {len(normalized)} items -> {OUTPUT_FILE}")
-    print(f"  - News: {len(news)}")
-    print(f"  - Research: {len(research)}")
-    print(f"  - Open Source: {len(open_source)}")
+    print("Categories:")
+    for cat, count in categories.items():
+        print(f"  - {cat}: {count}")
 
 
 if __name__ == "__main__":

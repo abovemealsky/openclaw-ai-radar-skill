@@ -4,21 +4,20 @@ Structure:
 
 # AI Radar — Daily Brief
 
-## Key Updates
-List the most important AI announcements today.
-Include:
-- headline
-- summary
-- why it matters
+## Model Releases
+Important AI model launches, product updates, and API announcements.
 
 ## Research Highlights
-Summarize notable research papers.
+Important papers, technical ideas, or notable research signals.
 
 ## Open Source
-List trending AI repositories.
+Trending repositories, models, and AI tools.
 
-## Industry Signals
-Describe emerging patterns in the AI ecosystem.
+## Industry Developments
+Important company, market, or product news related to AI.
+
+## Policy & Governance
+Important regulation, safety, or governance developments.
 
 ## Quick Take
-Provide a short summary of the most important takeaway.
+Summarize the most important takeaway from today.

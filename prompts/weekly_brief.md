@@ -4,13 +4,20 @@ Structure:
 
 # AI Radar — Weekly Brief
 
-## Major Model Releases
+## Model Releases
+Major AI model launches and product updates this week.
 
-## Important Research
+## Research Highlights
+Important papers and research signals from the week.
 
-## Open Source Trends
+## Open Source
+Trending AI repositories and open-source tools.
 
 ## Industry Developments
+Major company, market, and product news.
+
+## Policy & Governance
+Important regulatory and policy developments.
 
 ## Weekly Trend Analysis
-Explain the most important AI trend of the week.
+Analyze the most important AI trend of the week.

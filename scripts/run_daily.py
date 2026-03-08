@@ -25,15 +25,17 @@ os.environ["RADAR_MODE"] = MODE
 
 def run_script(script_name):
     """Run a Python script and handle errors."""
+    mode_str = "Daily" if MODE == "daily" else "Weekly"
     print(f"\n{'='*50}")
-    print(f"Running: {script_name} ({MODE} mode)")
+    print(f"Running: {script_name} ({mode_str} mode)")
     print("="*50)
     
     result = subprocess.run(
         [sys.executable, script_name],
         capture_output=True,
         text=True,
-        cwd=SCRIPT_DIR
+        cwd=SCRIPT_DIR,
+        env={**os.environ, "RADAR_MODE": MODE}
     )
     
     if result.returncode != 0:
@@ -53,12 +55,11 @@ def main():
     print(f"AI Radar - {mode_str} Brief Pipeline")
     print("="*50)
     print(f"Mode: {MODE} (last {'24 hours' if MODE == 'daily' else '7 days'})")
+    print(f"Categories: Model Releases, Research, Open Source, Industry, Policy")
     
     # Pipeline scripts in order
     scripts = [
-        "fetch_news.py",
-        "fetch_arxiv.py",
-        "fetch_github.py",
+        "fetch_intelligence.py",
         "normalize_items.py",
         "generate_daily_brief.py"
     ]
