@@ -69,8 +69,31 @@ python run_daily.py weekly
 
 Generated files are saved to:
 - `data/raw/intelligence.json` - Raw fetched data
-- `data/processed/items.json` - Normalized items
+- `data/processed/items.json` - Normalized items (used by dashboard)
 - `data/processed/daily_brief.md` - Formatted brief (Markdown)
+
+## Dashboard
+
+AI Radar includes a simple web dashboard to visualize daily AI intelligence.
+
+To view the dashboard:
+
+1. Run the daily pipeline
+   ```bash
+   python scripts/run_daily.py
+   ```
+
+2. Open `dashboard/index.html` in your browser
+
+The dashboard will load data from: `data/processed/items.json`
+
+The dashboard displays:
+- Model Releases
+- Research Highlights
+- Open Source
+- Industry Developments
+- Policy & Governance
+- Quick Take
 
 ## Configuration
 
@@ -107,6 +130,10 @@ openclaw-ai-radar-skill/
 │   ├── normalize_items.py
 │   ├── generate_daily_brief.py
 │   └── run_daily.py
+├── dashboard/                  # Web dashboard
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
 ├── data/                       # Data files
 │   ├── raw/                   # Raw fetched data
 │   └── processed/             # Processed & generated
