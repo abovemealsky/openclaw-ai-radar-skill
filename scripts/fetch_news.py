@@ -4,12 +4,19 @@ Fetch AI news from RSS sources.
 """
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil import parser as date_parser
 import feedparser
 
-SOURCES_FILE = "sources/news_sources.json"
-OUTPUT_FILE = "data/raw/news.json"
+# Get the skill root directory (parent of scripts/)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SKILL_ROOT = os.path.dirname(SCRIPT_DIR)
+
+SOURCES_FILE = os.path.join(SKILL_ROOT, "sources/news_sources.json")
+OUTPUT_FILE = os.path.join(SKILL_ROOT, "data/raw/news.json")
+
+# Only keep news from the last 7 days
+MAX_AGE_DAYS = 7
 
 
 def load_sources():
@@ -24,21 +31,34 @@ def fetch_feed(source_url):
     try:
         feed = feedparser.parse(source_url)
         entries = []
-        for entry in feed.entries[:10]:
+        now = datetime.now()
+        cutoff_date = now - timedelta(days=MAX_AGE_DAYS)
+        
+        for entry in feed.entries:
             # Try to extract published date
             published = ""
+            published_dt = None
+            
             if hasattr(entry, "published"):
                 try:
-                    dt = date_parser.parse(entry.published)
-                    published = dt.strftime("%Y-%m-%d")
+                    published_dt = date_parser.parse(entry.published)
+                    published = published_dt.strftime("%Y-%m-%d")
                 except:
-                    published = datetime.now().strftime("%Y-%m-%d")
+                    published = now.strftime("%Y-%m-%d")
             elif hasattr(entry, "updated"):
                 try:
-                    dt = date_parser.parse(entry.updated)
-                    published = dt.strftime("%Y-%m-%d")
+                    published_dt = date_parser.parse(entry.updated)
+                    published = published_dt.strftime("%Y-%m-%d")
                 except:
-                    published = datetime.now().strftime("%Y-%m-%d")
+                    published = now.strftime("%Y-%m-%d")
+            
+            # Skip old entries (handle timezone-aware dates)
+            if published_dt:
+                # Convert to naive datetime for comparison
+                if published_dt.tzinfo is not None:
+                    published_dt = published_dt.replace(tzinfo=None)
+                if published_dt < cutoff_date:
+                    continue
             
             # Extract source name from feed or URL
             source = feed.feed.get("title", source_url)

@@ -5,10 +5,14 @@ Normalize items from different sources into a unified format.
 import json
 import os
 
-NEWS_FILE = "data/raw/news.json"
-RESEARCH_FILE = "data/raw/research.json"
-OPEN_SOURCE_FILE = "data/raw/open_source.json"
-OUTPUT_FILE = "data/processed/items.json"
+# Get the skill root directory (parent of scripts/)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SKILL_ROOT = os.path.dirname(SCRIPT_DIR)
+
+NEWS_FILE = os.path.join(SKILL_ROOT, "data/raw/news.json")
+RESEARCH_FILE = os.path.join(SKILL_ROOT, "data/raw/research.json")
+OPEN_SOURCE_FILE = os.path.join(SKILL_ROOT, "data/raw/open_source.json")
+OUTPUT_FILE = os.path.join(SKILL_ROOT, "data/processed/items.json")
 
 
 def load_json(filepath):

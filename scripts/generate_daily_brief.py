@@ -6,8 +6,12 @@ import json
 import os
 from datetime import datetime
 
-ITEMS_FILE = "data/processed/items.json"
-OUTPUT_FILE = "data/processed/daily_brief.md"
+# Get the skill root directory (parent of scripts/)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SKILL_ROOT = os.path.dirname(SCRIPT_DIR)
+
+ITEMS_FILE = os.path.join(SKILL_ROOT, "data/processed/items.json")
+OUTPUT_FILE = os.path.join(SKILL_ROOT, "data/processed/daily_brief.md")
 
 
 def load_items():

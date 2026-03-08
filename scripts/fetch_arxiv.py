@@ -8,8 +8,12 @@ from datetime import datetime
 from dateutil import parser as date_parser
 import feedparser
 
-SOURCES_FILE = "sources/research_sources.json"
-OUTPUT_FILE = "data/raw/research.json"
+# Get the skill root directory (parent of scripts/)
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+SKILL_ROOT = os.path.dirname(SCRIPT_DIR)
+
+SOURCES_FILE = os.path.join(SKILL_ROOT, "sources/research_sources.json")
+OUTPUT_FILE = os.path.join(SKILL_ROOT, "data/raw/research.json")
 
 
 def load_sources():
