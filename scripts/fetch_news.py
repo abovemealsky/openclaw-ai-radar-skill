@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Fetch research papers from arXiv.
+Fetch AI news from RSS sources.
 """
 import json
 import os
@@ -8,24 +8,24 @@ from datetime import datetime
 from dateutil import parser as date_parser
 import feedparser
 
-SOURCES_FILE = "sources/research_sources.json"
-OUTPUT_FILE = "data/raw/research.json"
+SOURCES_FILE = "sources/news_sources.json"
+OUTPUT_FILE = "data/raw/news.json"
 
 
 def load_sources():
-    """Load arXiv sources from JSON config."""
+    """Load news sources from JSON config."""
     with open(SOURCES_FILE, "r") as f:
         data = json.load(f)
     return data.get("sources", [])
 
 
-def fetch_arxiv_feed(source_url):
-    """Fetch arXiv RSS feed."""
+def fetch_feed(source_url):
+    """Fetch a single RSS feed."""
     try:
         feed = feedparser.parse(source_url)
         entries = []
         for entry in feed.entries[:10]:
-            # Extract published date
+            # Try to extract published date
             published = ""
             if hasattr(entry, "published"):
                 try:
@@ -33,21 +33,24 @@ def fetch_arxiv_feed(source_url):
                     published = dt.strftime("%Y-%m-%d")
                 except:
                     published = datetime.now().strftime("%Y-%m-%d")
+            elif hasattr(entry, "updated"):
+                try:
+                    dt = date_parser.parse(entry.updated)
+                    published = dt.strftime("%Y-%m-%d")
+                except:
+                    published = datetime.now().strftime("%Y-%m-%d")
             
-            # Determine category from URL
-            source = "arXiv"
-            if "cs.AI" in source_url:
-                source = "arXiv CS.AI"
-            elif "cs.CL" in source_url:
-                source = "arXiv CS.CL"
-            elif "cs.LG" in source_url:
-                source = "arXiv CS.LG"
-            
-            # Clean title (remove newlines)
-            title = entry.get("title", "").replace("\n", " ").strip()
+            # Extract source name from feed or URL
+            source = feed.feed.get("title", source_url)
+            if "openai" in source_url.lower():
+                source = "OpenAI"
+            elif "anthropic" in source_url.lower():
+                source = "Anthropic"
+            elif "google" in source_url.lower():
+                source = "Google AI"
             
             entries.append({
-                "title": title,
+                "title": entry.get("title", ""),
                 "link": entry.get("link", ""),
                 "published": published,
                 "source": source
@@ -59,22 +62,24 @@ def fetch_arxiv_feed(source_url):
 
 
 def main():
-    """Main function to fetch all research papers."""
+    """Main function to fetch all news."""
+    # Ensure output directory exists
     os.makedirs("data/raw", exist_ok=True)
     
     sources = load_sources()
-    print(f"Fetching research from {len(sources)} sources...")
+    print(f"Fetching news from {len(sources)} sources...")
     
     all_items = []
     for source in sources:
         print(f"Fetching: {source}")
-        items = fetch_arxiv_feed(source)
+        items = fetch_feed(source)
         all_items.extend(items)
     
+    # Save to JSON
     with open(OUTPUT_FILE, "w") as f:
         json.dump(all_items, f, indent=2, ensure_ascii=False)
     
-    print(f"Fetched {len(all_items)} research papers -> {OUTPUT_FILE}")
+    print(f"Fetched {len(all_items)} news items -> {OUTPUT_FILE}")
 
 
 if __name__ == "__main__":
