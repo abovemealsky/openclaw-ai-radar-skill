@@ -1,0 +1,7 @@
+{
+  "sources": [
+    "https://export.arxiv.org/rss/cs.AI",
+    "https://export.arxiv.org/rss/cs.CL",
+    "https://export.arxiv.org/rss/cs.LG"
+  ]
+}

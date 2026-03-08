@@ -1,0 +1,6 @@
+{
+  "sources": [
+    "https://github.com/trending",
+    "https://huggingface.co/models?sort=trending"
+  ]
+}
